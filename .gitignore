@@ -1,0 +1,8 @@
+*.elf
+*.hex
+*.slxc
+*.bin
+*.autosave
+*.original
+slprj/
+Pacemaker_ert_rtw/
