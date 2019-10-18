@@ -1,4 +1,5 @@
 import tkinter as tk
+import datetime
 
 class SampleApp(tk.Tk):
     def __init__(self):
@@ -39,19 +40,135 @@ class Welcome(tk.Frame):
         index = [x for x in range(0, len(content), 2) if inUsr.get() == content[x].strip('\n')]
         if index:
             if inPass.get() == content[index[0]+1].strip('\n'):
-                master.switch_frame(Main)
+                tk.master.switch_frame(Main)
             else:
                 tk.Label(self, text="          Error: The password is incorrect.          ").grid(row=8, columnspan=2, pady=5)
         else:
             tk.Label(self, text="          Error: The username does not exist.          ").grid(row=8, columnspan=2, pady=5)
 
 
+# Must include 1, 2 (input buttons), 3, 4, and 7 from section 3.2.2 in Overview
 class Main(tk.Frame):
     def __init__(self, master):
         tk.master = master
         tk.Frame.__init__(self, master)
-        tk.Label(self, text="Main", font=('Helvetica', 18)).grid(row=0)
-        tk.Button(self, text="Go back to start page", command=lambda: master.switch_frame(Welcome)).grid(row=1)
+        
+        tk.Label(self, text="Programmable Parameters").grid(row=1, columnspan=3)
+
+        tk.Label(self, text="Parameters").grid(row=2)
+        tk.Label(self, text="Value").grid(row=2, column=1)
+        tk.Label(self, text="Lower").grid(row=2, column=2)
+
+        # Bradycardia Operation Mode ===================================================================================
+        tk.Label(self, text="Bradycardia Operation Mode").grid(row=3)
+        bom = tk.StringVar(self)
+        bom.set("AOO") # default value
+        tk.OptionMenu(self, bom, "AOO", "VOO", "AAI", "VVI").grid(row=3, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(bom, 0)).grid(row=3, column=2)
+
+        # Lower Rate Limit =============================================================================================
+        tk.Label(self, text="Lower Rate Limit").grid(row=4)
+        lrl = tk.Entry(self)
+        lrl.grid(row=4, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(lrl, 1)).grid(row=4, column=2)
+
+        # Upper Rate Limit =============================================================================================
+        tk.Label(self, text="Upper Rate Limit").grid(row=5)
+        url = tk.Entry(self)
+        url.grid(row=5, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(url, 2)).grid(row=5, column=2)
+
+        # Atrial Pulse Width ===========================================================================================
+        tk.Label(self, text="Atrial Pulse Width").grid(row=6)
+        apw = tk.Entry(self)
+        apw.grid(row=6, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(apw, 3)).grid(row=6, column=2)
+
+        # Ventricular Pulse Width ======================================================================================
+        tk.Label(self, text="Ventricular Pulse Width").grid(row=7)
+        vpw = tk.Entry(self)
+        vpw.grid(row=7, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(bom, 4)).grid(row=7, column=2)
+
+        # Atrial Pulse Amplotude Regulated =============================================================================
+        tk.Label(self, text="Atrial Pulse Amplotude Regulated").grid(row=8)
+        apar = tk.Entry(self)
+        apar.grid(row=8, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(apar, 5)).grid(row=8, column=2)
+
+        # Ventricular Pulse Ampliotude Regulated =======================================================================
+        tk.Label(self, text="Bradycardia Operation Mode").grid(row=9)
+        vpar = tk.Entry(self)
+        vpar.grid(row=9, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(vpar, 6)).grid(row=9, column=2)
+
+        # Fixed AV Delay ===============================================================================================
+        tk.Label(self, text="Fixed AV Delay").grid(row=10)
+        fad = tk.Entry(self)
+        fad.grid(row=10, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(fad, 7)).grid(row=10, column=2)
+
+        tk.Label(self, text="").grid(row=11)
+        tk.Label(self, text="Measured Parameters").grid(row=12, columnspan=3)
+        
+        tk.Label(self, text="Parameter").grid(row=13)
+        tk.Label(self, text="Value").grid(row=13, column=1)
+        tk.Label(self, text="Lower").grid(row=13, column=2)
+
+        # P Wave =======================================================================================================
+        tk.Label(self, text="P Wave").grid(row=14)
+        pwave = tk.Entry(self)
+        pwave.grid(row=14, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(pwave, 8)).grid(row=14, column=2)
+
+        # R Wave =======================================================================================================
+        tk.Label(self, text="R Wave").grid(row=15)
+        rwave = tk.Entry(self)
+        rwave.grid(row=15, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(rwave, 9)).grid(row=15, column=2)
+
+        # PPM ==========================================================================================================
+        tk.Label(self, text="PPM").grid(row=16)
+        ppm = tk.Entry(self)
+        ppm.grid(row=16, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(ppm, 10)).grid(row=16, column=2)
+
+        # Battery Status Level =========================================================================================
+        tk.Label(self, text="Battery Status Level").grid(row=17)
+        bsl = tk.StringVar(self)
+        bsl.set("AOO") # default value
+        tk.OptionMenu(self, bsl, "BOL").grid(row=17, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(bsl, 11)).grid(row=17, column=2)
+
+        # Controls =====================================================================================================
+        tk.Label(self, text="").grid(row=1, column=3)
+        tk.Label(self, text="Controls").grid(row=1, column=4, columnspan=4)
+        tk.Button(self, text="Start", command=lambda: self.update_label()).grid(row=2, column=4)
+        tk.Button(self, text="Stop", command=lambda: self.stop()).grid(row=2, column=5)
+        tk.Button(self, text="Reset", command=lambda: self.stop()).grid(row=2, column=6)
+        tk.Button(self, text="Close", command=lambda: self.close()).grid(row=2, column=7)
+
+        #tk.Label(self, text="Monitor").grid(row=4, column=4, columnspan=4)
+        #tk.Label(self, text="Status").grid(row=5, column=4)
+        #tk.Label(self, text="Upper Rate Limit").grid(row=6, column=4)
+
+
+    def close(self):
+        exit()
+
+    def stop(self):
+        if self._job is not None:
+            self.after_cancel(self._job)
+            self._job = None
+
+    def set_variable(self, value, port):
+        if value.get():
+            print("Sent " + value.get() + " to port " + str(port) + ".")
+
+    def update_label(self):
+        currentTime = datetime.datetime.now()
+        tk.Label(self, text=currentTime).grid(row=0)
+        self._job = self.after(1000, self.update_label)
 
 class Register(tk.Frame):
     def __init__(self, master):
