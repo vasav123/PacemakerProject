@@ -75,75 +75,87 @@ class Main(tk.Frame):
         tk.Label(self, text="Lower Rate Limit (ppm)").grid(row=4)
         lrl = tk.Entry(self)
         lrl.grid(row=4, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_lrl(lrl, 1)).grid(row=4, column=2)
+        self.lrl_b = tk.Button(self, text="Set", command=lambda: self.set_lrl(lrl, 1))
 
         # Upper Rate Limit =============================================================================================
         tk.Label(self, text="Upper Rate Limit (ppm)").grid(row=5)
         url = tk.Entry(self)
         url.grid(row=5, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_url(url, 2)).grid(row=5, column=2)
+        self.url_b = tk.Button(self, text="Set", command=lambda: self.set_url(url, 2))
 
         # Atrial Pulse Width ===========================================================================================
         tk.Label(self, text="Atrial Pulse Width (ms)").grid(row=6)
         apw = tk.Entry(self)
         apw.grid(row=6, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_avpw(apw, 3)).grid(row=6, column=2)
+        self.apw_b = tk.Button(self, text="Set", command=lambda: self.set_avpw(apw, 3))
+        #.grid(row=6, column=2)
 
         # Ventricular Pulse Width ======================================================================================
         tk.Label(self, text="Ventricular Pulse Width (ms)").grid(row=7)
         vpw = tk.Entry(self)
         vpw.grid(row=7, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_avpw(vpw, 4)).grid(row=7, column=2)
+        self.vpw_b = tk.Button(self, text="Set", command=lambda: self.set_avpw(vpw, 4))
+        #.grid(row=7, column=2)
 
         # Atrial Pulse Amplitude Regulated =============================================================================
         tk.Label(self, text="Atrial Pulse Amplitude Regulated (V)").grid(row=8)
         apar = tk.Entry(self)
         apar.grid(row=8, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_apa(apar, 5)).grid(row=8, column=2)
+        self.apar_b = tk.Button(self, text="Set", command=lambda: self.set_apa(apar, 5))
+        #.grid(row=8, column=2)
 
         # Ventricular Pulse Amplitude Regulated =======================================================================
         tk.Label(self, text="Bradycardia Operation Mode").grid(row=9)
         vpar = tk.Entry(self)
         vpar.grid(row=9, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(vpar, 6)).grid(row=9, column=2)
+        self.vpar_b = tk.Button(self, text="Set", command=lambda: self.set_variable(vpar, 6))
+        #.grid(row=9, column=2)
 
-        # Fixed AV Delay ===============================================================================================
-        tk.Label(self, text="Fixed AV Delay (ms)").grid(row=10)
-        fad = tk.Entry(self)
-        fad.grid(row=10, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_avd(fad, 7)).grid(row=10, column=2)
+        # ARP =========================================================================================================
+        tk.Label(self, text="ARP").grid(row=10)
+        arp = tk.Entry(self)
+        arp.grid(row=10, column=1)
+        self.arp_b = tk.Button(self, text="Set", command=lambda: self.set_avd(arp, 7))
+        #.grid(row=10, column=2)
 
-        tk.Label(self, text="").grid(row=11)
-        tk.Label(self, text="Measured Parameters").grid(row=12, columnspan=3)
+        # VRP =========================================================================================================
+        tk.Label(self, text="VRP").grid(row=11)
+        vrp = tk.Entry(self)
+        vrp.grid(row=11, column=1)
+        self.vrp_b = tk.Button(self, text="Set", command=lambda: self.set_avd(vrp, 7))
+        #.grid(row=10, column=2)
+
+        tk.Label(self, text="").grid(row=12)
+        tk.Label(self, text="Measured Parameters").grid(row=13, columnspan=3)
         
-        tk.Label(self, text="Parameter").grid(row=13)
-        tk.Label(self, text="Value").grid(row=13, column=1)
-        tk.Label(self, text="Lower").grid(row=13, column=2)
+        tk.Label(self, text="Parameter").grid(row=14)
+        tk.Label(self, text="Value").grid(row=14, column=1)
+        tk.Label(self, text="Lower").grid(row=14, column=2)
 
         # P Wave =======================================================================================================
-        tk.Label(self, text="P Wave (mV)").grid(row=14)
+        tk.Label(self, text="P Wave (mV)").grid(row=15)
         pwave = tk.Entry(self)
-        pwave.grid(row=14, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(pwave, 8)).grid(row=14, column=2)
+        pwave.grid(row=15, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(pwave, 8)).grid(row=15, column=2)
 
         # R Wave =======================================================================================================
-        tk.Label(self, text="R Wave (mV)").grid(row=15)
+        tk.Label(self, text="R Wave (mV)").grid(row=16)
         rwave = tk.Entry(self)
-        rwave.grid(row=15, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(rwave, 9)).grid(row=15, column=2)
+        rwave.grid(row=16, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(rwave, 9)).grid(row=16, column=2)
 
         # PPM ==========================================================================================================
-        tk.Label(self, text="PPM").grid(row=16)
+        tk.Label(self, text="PPM").grid(row=17)
         ppm = tk.Entry(self)
-        ppm.grid(row=16, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(ppm, 10)).grid(row=16, column=2)
+        ppm.grid(row=17, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(ppm, 10)).grid(row=17, column=2)
 
         # Battery Status Level =========================================================================================
-        tk.Label(self, text="Battery Status Level").grid(row=17)
+        tk.Label(self, text="Battery Status Level").grid(row=18)
         bsl = tk.StringVar(self)
         bsl.set("AOO") # default value
-        tk.OptionMenu(self, bsl, "BOL").grid(row=17, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(bsl, 11)).grid(row=17, column=2)
+        tk.OptionMenu(self, bsl, "BOL").grid(row=18, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(bsl, 11)).grid(row=18, column=2)
 
         # Controls =====================================================================================================
         tk.Label(self, text="").grid(row=1, column=3)
@@ -169,6 +181,36 @@ class Main(tk.Frame):
 
     def set_mode(self, value):
         mode = value.get()
+        self.lrl_b.grid_forget()
+        self.url_b.grid_forget()
+        self.apw_b.grid_forget()
+        self.apar_b.grid_forget()
+        self.vpw_b.grid_forget()
+        self.vpar_b.grid_forget()
+
+        if (mode == "AOO"):
+            self.lrl_b.grid(row=4, column=2)
+            self.url_b.grid(row=5, column=2)
+            self.apw_b.grid(row=6, column=2)
+            self.apar_b.grid(row=8, column=2)
+        if (mode == "VOO"):
+            self.lrl_b.grid(row=4, column=2)
+            self.url_b.grid(row=5, column=2)
+            self.vpw_b.grid(row=7, column=2)
+            self.vpar_b.grid(row=9, column=2)
+        if (mode == 'AAI'):
+            self.lrl_b.grid(row=4, column=2)
+            self.url_b.grid(row=5, column=2)
+            self.apw_b.grid(row=6, column=2)
+            self.apar_b.grid(row=8, column=2)
+            self.arp_b.grid(row=10, column=2)
+        if (mode == "VVI"):
+            self.lrl_b.grid(row=4, column=2)
+            self.url_b.grid(row=5, column=2)
+            self.vpw_b.grid(row=7, column=2)
+            self.vpar_b.grid(row=9, column=2)
+            self.vrp_b.grid(row=11, column=2)
+        
         print (mode)
         return mode
     
@@ -254,15 +296,18 @@ class Register(tk.Frame):
             with open("accounts.txt", "r") as file:
                 content = file.readlines()
         
-            index = [x for x in range(0, len(content), 2) if regUsr.get() == content[x].strip('\n')]
-            if index:
-                tk.Label(self, text="          Error: Username already taken.          ").grid(row=6, columnspan=2)
-
+            if (len(content) >= 20):
+                tk.Label(self, text="          Error: Max amount of users reached.          ").grid(row=6, columnspan=2)
             else:
-                tk.Label(self, text="          Account created succesfully.          ").grid(row=6, columnspan=2)
-                with open("accounts.txt", "a+") as file:
-                    file.write(regUsr.get() + "\n")
-                    file.write(regPass.get() + "\n")
+                index = [x for x in range(0, len(content), 2) if regUsr.get() == content[x].strip('\n')]
+                if index:
+                    tk.Label(self, text="          Error: Username already taken.          ").grid(row=6, columnspan=2)
+
+                else:
+                    tk.Label(self, text="          Account created succesfully.          ").grid(row=6, columnspan=2)
+                    with open("accounts.txt", "a+") as file:
+                        file.write(regUsr.get() + "\n")
+                        file.write(regPass.get() + "\n")
 
         regUsr.delete(0, len(regUsr.get()))
         regPass.delete(0, len(regPass.get()))
