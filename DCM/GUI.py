@@ -1,6 +1,8 @@
 #Device Controller-Monitor
 import tkinter as tk
 import datetime
+import os
+from tkinter import messagebox
 
 class SampleApp(tk.Tk):
     def __init__(self):
@@ -63,51 +65,53 @@ class Main(tk.Frame):
         # Bradycardia Operation Mode ===================================================================================
         tk.Label(self, text="Bradycardia Operation Mode").grid(row=3)
         bom = tk.StringVar(self)
-        bom.set("AOO") # default value
-        tk.OptionMenu(self, bom, "AOO", "VOO", "AAI", "VVI").grid(row=3, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(bom, 0)).grid(row=3, column=2)
+        bom.set("Off") # default value
+        tk.OptionMenu(self, bom, "Off", "AOO", "VOO", "AAI", "VVI").grid(row=3, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_mode(bom)).grid(row=3, column=2)
+
+#################################################################################################################################
 
         # Lower Rate Limit =============================================================================================
-        tk.Label(self, text="Lower Rate Limit").grid(row=4)
+        tk.Label(self, text="Lower Rate Limit (ppm)").grid(row=4)
         lrl = tk.Entry(self)
         lrl.grid(row=4, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(lrl, 1)).grid(row=4, column=2)
+        tk.Button(self, text="Set", command=lambda: self.set_lrl(lrl, 1)).grid(row=4, column=2)
 
         # Upper Rate Limit =============================================================================================
-        tk.Label(self, text="Upper Rate Limit").grid(row=5)
+        tk.Label(self, text="Upper Rate Limit (ppm)").grid(row=5)
         url = tk.Entry(self)
         url.grid(row=5, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(url, 2)).grid(row=5, column=2)
+        tk.Button(self, text="Set", command=lambda: self.set_url(url, 2)).grid(row=5, column=2)
 
         # Atrial Pulse Width ===========================================================================================
-        tk.Label(self, text="Atrial Pulse Width").grid(row=6)
+        tk.Label(self, text="Atrial Pulse Width (ms)").grid(row=6)
         apw = tk.Entry(self)
         apw.grid(row=6, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(apw, 3)).grid(row=6, column=2)
+        tk.Button(self, text="Set", command=lambda: self.set_avpw(apw, 3)).grid(row=6, column=2)
 
         # Ventricular Pulse Width ======================================================================================
-        tk.Label(self, text="Ventricular Pulse Width").grid(row=7)
+        tk.Label(self, text="Ventricular Pulse Width (ms)").grid(row=7)
         vpw = tk.Entry(self)
         vpw.grid(row=7, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(bom, 4)).grid(row=7, column=2)
+        tk.Button(self, text="Set", command=lambda: self.set_avpw(vpw, 4)).grid(row=7, column=2)
 
-        # Atrial Pulse Amplotude Regulated =============================================================================
-        tk.Label(self, text="Atrial Pulse Amplotude Regulated").grid(row=8)
+        # Atrial Pulse Amplitude Regulated =============================================================================
+        tk.Label(self, text="Atrial Pulse Amplitude Regulated (V)").grid(row=8)
         apar = tk.Entry(self)
         apar.grid(row=8, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(apar, 5)).grid(row=8, column=2)
+        tk.Button(self, text="Set", command=lambda: self.set_apa(apar, 5)).grid(row=8, column=2)
 
-        # Ventricular Pulse Ampliotude Regulated =======================================================================
+        # Ventricular Pulse Amplitude Regulated =======================================================================
         tk.Label(self, text="Bradycardia Operation Mode").grid(row=9)
         vpar = tk.Entry(self)
         vpar.grid(row=9, column=1)
         tk.Button(self, text="Set", command=lambda: self.set_variable(vpar, 6)).grid(row=9, column=2)
 
         # Fixed AV Delay ===============================================================================================
-        tk.Label(self, text="Fixed AV Delay").grid(row=10)
+        tk.Label(self, text="Fixed AV Delay (ms)").grid(row=10)
         fad = tk.Entry(self)
         fad.grid(row=10, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(fad, 7)).grid(row=10, column=2)
+        tk.Button(self, text="Set", command=lambda: self.set_avd(fad, 7)).grid(row=10, column=2)
 
         tk.Label(self, text="").grid(row=11)
         tk.Label(self, text="Measured Parameters").grid(row=12, columnspan=3)
@@ -117,13 +121,13 @@ class Main(tk.Frame):
         tk.Label(self, text="Lower").grid(row=13, column=2)
 
         # P Wave =======================================================================================================
-        tk.Label(self, text="P Wave").grid(row=14)
+        tk.Label(self, text="P Wave (mV)").grid(row=14)
         pwave = tk.Entry(self)
         pwave.grid(row=14, column=1)
         tk.Button(self, text="Set", command=lambda: self.set_variable(pwave, 8)).grid(row=14, column=2)
 
         # R Wave =======================================================================================================
-        tk.Label(self, text="R Wave").grid(row=15)
+        tk.Label(self, text="R Wave (mV)").grid(row=15)
         rwave = tk.Entry(self)
         rwave.grid(row=15, column=1)
         tk.Button(self, text="Set", command=lambda: self.set_variable(rwave, 9)).grid(row=15, column=2)
@@ -149,10 +153,11 @@ class Main(tk.Frame):
         tk.Button(self, text="Reset", command=lambda: self.stop()).grid(row=2, column=6)
         tk.Button(self, text="Close", command=lambda: self.close()).grid(row=2, column=7)
 
+#################################################################################################################################
         #tk.Label(self, text="Monitor").grid(row=4, column=4, columnspan=4)
         #tk.Label(self, text="Status").grid(row=5, column=4)
         #tk.Label(self, text="Upper Rate Limit").grid(row=6, column=4)
-
+#################################################################################################################################
 
     def close(self):
         exit()
@@ -162,14 +167,60 @@ class Main(tk.Frame):
             self.after_cancel(self._job)
             self._job = None
 
+    def set_mode(self, value):
+        mode = value.get()
+        print (mode)
+        return mode
+    
     def set_variable(self, value, port):
         if value.get():
             print("Sent " + value.get() + " to port " + str(port) + ".")
+
+    def set_lrl(self, value, port):
+        if (value.get().isdigit()) and (int(value.get())>=30 and int(value.get())<=175):
+            print("Sent " + value.get() + " to port " + str(port) + ".")
+        else:
+            messagebox.showinfo("Error", "Please choose a value between 30ppm - 175ppm")
+
+    def set_url(self, value, port):
+        if (value.get().isdigit()) and (int(value.get())>=50 and int(value.get())<=175):
+            print("Sent " + value.get() + " to port " + str(port) + ".")
+        else:
+            messagebox.showinfo("Error", "Please choose a value between 50ppm - 175ppm")
+
+    def set_avpw(self, value, port):
+        try:
+            checknum = float(value.get())
+            if (checknum>=0.1 and checknum<=1.9):
+                print("Sent " + value.get() + " to port " + str(port) + ".")
+            else:
+                messagebox.showinfo("Error", "Please choose a value between 0.1ms - 1.9ms")
+        except ValueError:
+            messagebox.showinfo("Error", "Please choose a value between 0.1ms - 1.9ms")
+
+    def set_apa(self, value, port):
+        try:
+            checknum = float(value.get())
+            if (checknum>=0.5 and checknum<=3.2) or (checknum>=3.5 and checknum<=7):
+                print("Sent " + value.get() + " to port " + str(port) + ".")
+            else:
+                messagebox.showinfo("Error", "Please choose a value between 0.5V - 3.2V or 3.5V - 7.0V")
+        except ValueError:
+            messagebox.showinfo("Error", "Please choose a value between 0.5V - 3.2V or 3.5V - 7.0V")
+
+    def set_avd(self, value, port):
+        if (value.get().isdigit()) and (int(value.get())>=70 and int(value.get())<=300):
+            print("Sent " + value.get() + " to port " + str(port) + ".")
+        else:
+            messagebox.showinfo("Error", "Please choose a value between 70ms - 300ms")
+
 
     def update_label(self):
         currentTime = datetime.datetime.now()
         tk.Label(self, text=currentTime).grid(row=0)
         self._job = self.after(1000, self.update_label)
+
+#################################################################################################################################
 
 class Register(tk.Frame):
     def __init__(self, master):
