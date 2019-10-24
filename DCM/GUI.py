@@ -73,56 +73,56 @@ class Main(tk.Frame):
 
         # Lower Rate Limit =============================================================================================
         tk.Label(self, text="Lower Rate Limit (ppm)").grid(row=4)
-        lrl = tk.Entry(self)
-        lrl.grid(row=4, column=1)
-        self.lrl_b = tk.Button(self, text="Set", command=lambda: self.set_lrl(lrl, 1))
+        self.lrl = tk.Entry(self)
+        self.lrl.grid(row=4, column=1)
+        self.lrl_b = tk.Button(self, text="Set", command=lambda: self.set_lrl(self.lrl, 1))
 
         # Upper Rate Limit =============================================================================================
         tk.Label(self, text="Upper Rate Limit (ppm)").grid(row=5)
-        url = tk.Entry(self)
-        url.grid(row=5, column=1)
-        self.url_b = tk.Button(self, text="Set", command=lambda: self.set_url(url, 2))
+        self.url = tk.Entry(self)
+        self.url.grid(row=5, column=1)
+        self.url_b = tk.Button(self, text="Set", command=lambda: self.set_url(self.url, 2))
 
         # Atrial Pulse Width ===========================================================================================
         tk.Label(self, text="Atrial Pulse Width (ms)").grid(row=6)
-        apw = tk.Entry(self)
-        apw.grid(row=6, column=1)
-        self.apw_b = tk.Button(self, text="Set", command=lambda: self.set_avpw(apw, 3))
+        self.apw = tk.Entry(self)
+        self.apw.grid(row=6, column=1)
+        self.apw_b = tk.Button(self, text="Set", command=lambda: self.set_avpw(self.apw, 3))
         #.grid(row=6, column=2)
 
         # Ventricular Pulse Width ======================================================================================
         tk.Label(self, text="Ventricular Pulse Width (ms)").grid(row=7)
-        vpw = tk.Entry(self)
-        vpw.grid(row=7, column=1)
-        self.vpw_b = tk.Button(self, text="Set", command=lambda: self.set_avpw(vpw, 4))
+        self.vpw = tk.Entry(self)
+        self.vpw.grid(row=7, column=1)
+        self.vpw_b = tk.Button(self, text="Set", command=lambda: self.set_avpw(self.vpw, 4))
         #.grid(row=7, column=2)
 
         # Atrial Pulse Amplitude Regulated =============================================================================
         tk.Label(self, text="Atrial Pulse Amplitude Regulated (V)").grid(row=8)
-        apar = tk.Entry(self)
-        apar.grid(row=8, column=1)
-        self.apar_b = tk.Button(self, text="Set", command=lambda: self.set_apa(apar, 5))
+        self.apar = tk.Entry(self)
+        self.apar.grid(row=8, column=1)
+        self.apar_b = tk.Button(self, text="Set", command=lambda: self.set_avpa(self.apar, 5))
         #.grid(row=8, column=2)
 
         # Ventricular Pulse Amplitude Regulated =======================================================================
-        tk.Label(self, text="Bradycardia Operation Mode").grid(row=9)
-        vpar = tk.Entry(self)
-        vpar.grid(row=9, column=1)
-        self.vpar_b = tk.Button(self, text="Set", command=lambda: self.set_variable(vpar, 6))
+        tk.Label(self, text="Ventricular Pulse Amplitude Regulated (V)").grid(row=9)
+        self.vpar = tk.Entry(self)
+        self.vpar.grid(row=9, column=1)
+        self.vpar_b = tk.Button(self, text="Set", command=lambda: self.set_avpa(self.vpar, 6))
         #.grid(row=9, column=2)
 
-        # ARP =========================================================================================================
-        tk.Label(self, text="ARP").grid(row=10)
-        arp = tk.Entry(self)
-        arp.grid(row=10, column=1)
-        self.arp_b = tk.Button(self, text="Set", command=lambda: self.set_avd(arp, 7))
+        # Atrial Refractory Period ======================================================================================
+        tk.Label(self, text="Atrial Refractory Period (ms)").grid(row=10)
+        self.arp = tk.Entry(self)
+        self.arp.grid(row=10, column=1)
+        self.arp_b = tk.Button(self, text="Set", command=lambda: self.set_avrp(self.arp, 7))
         #.grid(row=10, column=2)
 
-        # VRP =========================================================================================================
-        tk.Label(self, text="VRP").grid(row=11)
-        vrp = tk.Entry(self)
-        vrp.grid(row=11, column=1)
-        self.vrp_b = tk.Button(self, text="Set", command=lambda: self.set_avd(vrp, 7))
+        # Ventricular Refractory Period ============================================================================
+        tk.Label(self, text="Ventricular Refractory Period (ms)").grid(row=11)
+        self.vrp = tk.Entry(self)
+        self.vrp.grid(row=11, column=1)
+        self.vrp_b = tk.Button(self, text="Set", command=lambda: self.set_avrp(self.vrp, 7))
         #.grid(row=10, column=2)
 
         tk.Label(self, text="").grid(row=12)
@@ -187,30 +187,99 @@ class Main(tk.Frame):
         self.apar_b.grid_forget()
         self.vpw_b.grid_forget()
         self.vpar_b.grid_forget()
+        self.arp_b.grid_forget()
+        self.vrp_b.grid_forget()
+        #Clear all entry fields
+        self.lrl.delete(0,'end')
+        self.url.delete(0,'end')
+        self.apw.delete(0,'end')
+        self.vpw.delete(0,'end')
+        self.apar.delete(0,'end')
+        self.vpar.delete(0,'end')
+        self.arp.delete(0,'end')
+        self.vrp.delete(0,'end')
 
         if (mode == "AOO"):
+            #Parameters that will show
             self.lrl_b.grid(row=4, column=2)
             self.url_b.grid(row=5, column=2)
             self.apw_b.grid(row=6, column=2)
             self.apar_b.grid(row=8, column=2)
+            #Clear all entry fields
+            self.lrl.delete(0,'end')
+            self.url.delete(0,'end')
+            self.apw.delete(0,'end')
+            self.vpw.delete(0,'end')
+            self.apar.delete(0,'end')
+            self.vpar.delete(0,'end')
+            self.arp.delete(0,'end')
+            self.vrp.delete(0,'end')
+            #Default values to be inserted
+            self.lrl.insert(0, 'defaultvalue')
+            self.url.insert(0, 'defaultvalue')
+            self.apw.insert(0, 'defaultvalue')
+            self.apar.insert(0, 'defaultvalue')
         if (mode == "VOO"):
             self.lrl_b.grid(row=4, column=2)
             self.url_b.grid(row=5, column=2)
             self.vpw_b.grid(row=7, column=2)
             self.vpar_b.grid(row=9, column=2)
+            #Clear all entry fields
+            self.lrl.delete(0,'end')
+            self.url.delete(0,'end')
+            self.apw.delete(0,'end')
+            self.vpw.delete(0,'end')
+            self.apar.delete(0,'end')
+            self.vpar.delete(0,'end')
+            self.arp.delete(0,'end')
+            self.vrp.delete(0,'end')
+            #Default values to be inserted
+            self.lrl.insert(0, 'defaultvalue')
+            self.url.insert(0, 'defaultvalue')
+            self.vpw.insert(0, 'defaultvalue')
+            self.vpar.insert(0, 'defaultvalue')
         if (mode == 'AAI'):
             self.lrl_b.grid(row=4, column=2)
             self.url_b.grid(row=5, column=2)
             self.apw_b.grid(row=6, column=2)
             self.apar_b.grid(row=8, column=2)
             self.arp_b.grid(row=10, column=2)
+            #Clear all entry fields
+            self.lrl.delete(0,'end')
+            self.url.delete(0,'end')
+            self.apw.delete(0,'end')
+            self.vpw.delete(0,'end')
+            self.apar.delete(0,'end')
+            self.vpar.delete(0,'end')
+            self.arp.delete(0,'end')
+            self.vrp.delete(0,'end')
+            #Default values to be inserted
+            self.lrl.insert(0, 'defaultvalue')
+            self.url.insert(0, 'defaultvalue')
+            self.apw.insert(0, 'defaultvalue')
+            self.apar.insert(0, 'defaultvalue')
+            self.arp.insert(0, 'defaultvalue')
         if (mode == "VVI"):
             self.lrl_b.grid(row=4, column=2)
             self.url_b.grid(row=5, column=2)
             self.vpw_b.grid(row=7, column=2)
             self.vpar_b.grid(row=9, column=2)
             self.vrp_b.grid(row=11, column=2)
-        
+            #Clear all entry fields
+            self.lrl.delete(0,'end')
+            self.url.delete(0,'end')
+            self.apw.delete(0,'end')
+            self.vpw.delete(0,'end')
+            self.apar.delete(0,'end')
+            self.vpar.delete(0,'end')
+            self.arp.delete(0,'end')
+            self.vrp.delete(0,'end')
+            #Default values to be inserted
+            self.lrl.insert(0, 'defaultvalue')
+            self.url.insert(0, 'defaultvalue')
+            self.vpw.insert(0, 'defaultvalue')
+            self.vpar.insert(0, 'defaultvalue')
+            self.vrp.insert(0, 'defaultvalue')
         print (mode)
         return mode
     
@@ -240,7 +309,7 @@ class Main(tk.Frame):
         except ValueError:
             messagebox.showinfo("Error", "Please choose a value between 0.1ms - 1.9ms")
 
-    def set_apa(self, value, port):
+    def set_avpa(self, value, port):
         try:
             checknum = float(value.get())
             if (checknum>=0.5 and checknum<=3.2) or (checknum>=3.5 and checknum<=7):
@@ -250,11 +319,11 @@ class Main(tk.Frame):
         except ValueError:
             messagebox.showinfo("Error", "Please choose a value between 0.5V - 3.2V or 3.5V - 7.0V")
 
-    def set_avd(self, value, port):
-        if (value.get().isdigit()) and (int(value.get())>=70 and int(value.get())<=300):
+    def set_avrp(self, value, port):
+        if (value.get().isdigit()) and (int(value.get())>=150 and int(value.get())<=500):
             print("Sent " + value.get() + " to port " + str(port) + ".")
         else:
-            messagebox.showinfo("Error", "Please choose a value between 70ms - 300ms")
+            messagebox.showinfo("Error", "Please choose a value between 150ms - 500ms")
 
 
     def update_label(self):
