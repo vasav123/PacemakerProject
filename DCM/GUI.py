@@ -78,13 +78,13 @@ class Main(tk.Frame):
 #################################################################################################################################
 
         # Lower Rate Limit =============================================================================================
-        tk.Label(self, text="Lower Rate Limit (ppm)").grid(row=4)
+        tk.Label(self, text="Lower Rate Limit (bpm)").grid(row=4)
         self.lrl = tk.Entry(self)
         self.lrl.grid(row=4, column=1)
         self.lrl_b = tk.Button(self, text="Set", command=lambda: self.set_lrl(self.lrl, 1))
 
         # Upper Rate Limit =============================================================================================
-        tk.Label(self, text="Upper Rate Limit (ppm)").grid(row=5)
+        tk.Label(self, text="Upper Rate Limit (bpm)").grid(row=5)
         self.url = tk.Entry(self)
         self.url.grid(row=5, column=1)
         self.url_b = tk.Button(self, text="Set", command=lambda: self.set_url(self.url, 2))
@@ -311,34 +311,40 @@ class Main(tk.Frame):
             print("Sent " + value.get() + " to port " + str(port) + ".")
 
     def set_lrl(self, value, port):
+        with open('user.txt', 'r') as file:
+            curruser = file.read()
+        filepath = curruser + '.json'
+        with open (filepath) as f:
+            usersettings = json.load(f)
         if (value.get().isdigit()) and (int(value.get())>=30 and int(value.get())<=175):
-            print("Sent " + value.get() + " to port " + str(port) + ".")
-            #Update json file value
-            with open('user.txt', 'r') as file:
-                curruser = file.read()
-            filepath = curruser + '.json'
-            with open (filepath) as f:
-                usersettings = json.load(f)
-            usersettings['LRL'] = int(value.get())
-            with open (filepath, "w") as file:
-                json.dump(usersettings, file)
+            if(usersettings['URL']>int(value.get())):
+                print("Sent " + value.get() + " to port " + str(port) + ".")
+                #Update json file value
+                usersettings['LRL'] = int(value.get())
+                with open (filepath, "w") as file:
+                    json.dump(usersettings, file)
+            else:
+                messagebox.showinfo("Error", "Please ensure your Lower Rate Limit is less than your Upper Rate Limit")
         else:
-            messagebox.showinfo("Error", "Please choose a value between 30ppm - 175ppm")
+            messagebox.showinfo("Error", "Please choose a value between 30bpm - 175bpm")
 
     def set_url(self, value, port):
+        with open('user.txt', 'r') as file:
+            curruser = file.read()
+        filepath = curruser + '.json'
+        with open (filepath) as f:
+            usersettings = json.load(f)
         if (value.get().isdigit()) and (int(value.get())>=50 and int(value.get())<=175):
-            print("Sent " + value.get() + " to port " + str(port) + ".")
-            #Update json file value
-            with open('user.txt', 'r') as file:
-                curruser = file.read()
-            filepath = curruser + '.json'
-            with open (filepath) as f:
-                usersettings = json.load(f)
-            usersettings['URL'] = int(value.get())
-            with open (filepath, "w") as file:
-                json.dump(usersettings, file)
+            if (usersettings['LRL']<int(value.get())):
+                print("Sent " + value.get() + " to port " + str(port) + ".")
+                #Update json file value
+                usersettings['URL'] = int(value.get())
+                with open (filepath, "w") as file:
+                    json.dump(usersettings, file)
+            else:
+                messagebox.showinfo("Error", "Please ensure your Upper Rate Limit is greater than your Lower Rate Limit")
         else:
-            messagebox.showinfo("Error", "Please choose a value between 50ppm - 175ppm")
+            messagebox.showinfo("Error", "Please choose a value between 50bpm - 175bpm")
 
     def set_apw(self, value, port):
         try:
