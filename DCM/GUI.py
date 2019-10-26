@@ -319,7 +319,7 @@ class Main(tk.Frame):
             filepath = curruser + '.json'
             with open (filepath) as f:
                 usersettings = json.load(f)
-            usersettings['LRL'] = value.get()
+            usersettings['LRL'] = int(value.get())
             with open (filepath, "w") as file:
                 json.dump(usersettings, file)
         else:
@@ -334,7 +334,7 @@ class Main(tk.Frame):
             filepath = curruser + '.json'
             with open (filepath) as f:
                 usersettings = json.load(f)
-            usersettings['URL'] = value.get()
+            usersettings['URL'] = int(value.get())
             with open (filepath, "w") as file:
                 json.dump(usersettings, file)
         else:
@@ -351,7 +351,7 @@ class Main(tk.Frame):
                 filepath = curruser + '.json'
                 with open (filepath) as f:
                     usersettings = json.load(f)
-                usersettings['APW'] = value.get()
+                usersettings['APW'] = float(value.get())
                 with open (filepath, "w") as file:
                     json.dump(usersettings, file)
             else:
@@ -370,7 +370,7 @@ class Main(tk.Frame):
                 filepath = curruser + '.json'
                 with open (filepath) as f:
                     usersettings = json.load(f)
-                usersettings['VPW'] = value.get()
+                usersettings['VPW'] = float(value.get())
                 with open (filepath, "w") as file:
                     json.dump(usersettings, file)
             else:
@@ -389,7 +389,7 @@ class Main(tk.Frame):
                 filepath = curruser + '.json'
                 with open (filepath) as f:
                     usersettings = json.load(f)
-                usersettings['APAR'] = value.get()
+                usersettings['APAR'] = float(value.get())
                 with open (filepath, "w") as file:
                     json.dump(usersettings, file)
             else:
@@ -408,7 +408,7 @@ class Main(tk.Frame):
                 filepath = curruser + '.json'
                 with open (filepath) as f:
                     usersettings = json.load(f)
-                usersettings['VPAR'] = value.get()
+                usersettings['VPAR'] = float(value.get())
                 with open (filepath, "w") as file:
                     json.dump(usersettings, file)
             else:
@@ -425,7 +425,7 @@ class Main(tk.Frame):
             filepath = curruser + '.json'
             with open (filepath) as f:
                 usersettings = json.load(f)
-            usersettings['ARP'] = value.get()
+            usersettings['ARP'] = int(value.get())
             with open (filepath, "w") as file:
                 json.dump(usersettings, file)
         else:
@@ -440,7 +440,7 @@ class Main(tk.Frame):
             filepath = curruser + '.json'
             with open (filepath) as f:
                 usersettings = json.load(f)
-            usersettings['VRP'] = value.get()
+            usersettings['VRP'] = int(value.get())
             with open (filepath, "w") as file:
                 json.dump(usersettings, file)
         else:
