@@ -62,114 +62,118 @@ class Main(tk.Frame):
         tk.master = master
         tk.Frame.__init__(self, master)
         
-        tk.Label(self, text="Programmable Parameters").grid(row=1, columnspan=3)
+        self.row_control = 1
+        # Controls =====================================================================================================
+        tk.Label(self, text="Controls").grid(row=self.row_control, columnspan=4)
+        f1 = tk.Frame(self)
+        f1.grid(row=self.row_control+1, sticky="nsew")
+        tk.Label(f1, text="                                                    ").grid(row=self.row_control+1)
+        tk.Button(f1, text="Start", command=lambda: self.update_label()).grid(row=self.row_control+1, column=1)
+        tk.Button(f1, text="Stop", command=lambda: self.stop()).grid(row=self.row_control+1, column=2)
+        tk.Button(f1, text="Reset", command=lambda: self.stop()).grid(row=self.row_control+1, column=3)
+        tk.Button(f1, text="Close", command=lambda: self.close()).grid(row=self.row_control+1, column=4)
+        tk.Label(self, text="").grid(row=self.row_control+2, columnspan=4)
+        tk.Label(self, text="").grid(row=self.row_control+2, column=4)
 
-        tk.Label(self, text="Parameters").grid(row=2)
-        tk.Label(self, text="Value").grid(row=2, column=1)
-        tk.Label(self, text="Lower").grid(row=2, column=2)
+        self.row_mode = self.row_control+3
+        tk.Label(self, text="Programmable Parameters").grid(row=self.row_mode, columnspan=3)
+
+        tk.Label(self, text="Parameters").grid(row=self.row_mode+1)
+        tk.Label(self, text="Value").grid(row=self.row_mode+1, column=1)
 
         # Bradycardia Operation Mode ===================================================================================
-        tk.Label(self, text="Bradycardia Operation Mode").grid(row=3)
-        bom = tk.StringVar(self)
-        bom.set("Off") # default value
-        tk.OptionMenu(self, bom, "Off", "AOO", "VOO", "AAI", "VVI").grid(row=3, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_mode(bom)).grid(row=3, column=2)
+        tk.Label(self, text="Bradycardia Operation Mode").grid(row=self.row_mode+2)
+        self.bom = tk.StringVar(self)
+        self.current_bom = tk.StringVar(self)
+        self.bom.set("Off") # default value
+        self.current_bom.set("Off")
+        tk.OptionMenu(self, self.bom, "Off", "AOO", "VOO", "AAI", "VVI").grid(row=self.row_mode+2, column=1)
 
 #################################################################################################################################
 
+        self.row_prog = self.row_mode+3
         # Lower Rate Limit =============================================================================================
-        tk.Label(self, text="Lower Rate Limit (bpm)").grid(row=4)
+        tk.Label(self, text="Lower Rate Limit (bpm)").grid(row=self.row_prog)
         self.lrl = tk.Entry(self)
-        self.lrl.grid(row=4, column=1)
+        self.lrl.grid(row=self.row_prog, column=1)
         self.lrl_b = tk.Button(self, text="Set", command=lambda: self.set_lrl(self.lrl, 1))
 
         # Upper Rate Limit =============================================================================================
-        tk.Label(self, text="Upper Rate Limit (bpm)").grid(row=5)
+        tk.Label(self, text="Upper Rate Limit (bpm)").grid(row=self.row_prog+1)
         self.url = tk.Entry(self)
-        self.url.grid(row=5, column=1)
+        self.url.grid(row=self.row_prog+1, column=1)
         self.url_b = tk.Button(self, text="Set", command=lambda: self.set_url(self.url, 2))
 
         # Atrial Pulse Width ===========================================================================================
-        tk.Label(self, text="Atrial Pulse Width (ms)").grid(row=6)
+        tk.Label(self, text="Atrial Pulse Width (ms)").grid(row=self.row_prog+2)
         self.apw = tk.Entry(self)
-        self.apw.grid(row=6, column=1)
+        self.apw.grid(row=self.row_prog+2, column=1)
         self.apw_b = tk.Button(self, text="Set", command=lambda: self.set_apw(self.apw, 3))
-        #.grid(row=6, column=2)
 
         # Ventricular Pulse Width ======================================================================================
-        tk.Label(self, text="Ventricular Pulse Width (ms)").grid(row=7)
+        tk.Label(self, text="Ventricular Pulse Width (ms)").grid(row=self.row_prog+3)
         self.vpw = tk.Entry(self)
-        self.vpw.grid(row=7, column=1)
+        self.vpw.grid(row=self.row_prog+3, column=1)
         self.vpw_b = tk.Button(self, text="Set", command=lambda: self.set_vpw(self.vpw, 4))
-        #.grid(row=7, column=2)
 
         # Atrial Pulse Amplitude Regulated =============================================================================
-        tk.Label(self, text="Atrial Pulse Amplitude Regulated (V)").grid(row=8)
+        tk.Label(self, text="Atrial Pulse Amplitude Regulated (V)").grid(row=self.row_prog+4)
         self.apar = tk.Entry(self)
-        self.apar.grid(row=8, column=1)
+        self.apar.grid(row=self.row_prog+4, column=1)
         self.apar_b = tk.Button(self, text="Set", command=lambda: self.set_apar(self.apar, 5))
-        #.grid(row=8, column=2)
 
         # Ventricular Pulse Amplitude Regulated =======================================================================
-        tk.Label(self, text="Ventricular Pulse Amplitude Regulated (V)").grid(row=9)
+        tk.Label(self, text="Ventricular Pulse Amplitude Regulated (V)").grid(row=self.row_prog+5)
         self.vpar = tk.Entry(self)
-        self.vpar.grid(row=9, column=1)
+        self.vpar.grid(row=self.row_prog+5, column=1)
         self.vpar_b = tk.Button(self, text="Set", command=lambda: self.set_vpar(self.vpar, 6))
-        #.grid(row=9, column=2)
 
         # Atrial Refractory Period ======================================================================================
-        tk.Label(self, text="Atrial Refractory Period (ms)").grid(row=10)
+        tk.Label(self, text="Atrial Refractory Period (ms)").grid(row=self.row_prog+6)
         self.arp = tk.Entry(self)
-        self.arp.grid(row=10, column=1)
+        self.arp.grid(row=self.row_prog+6, column=1)
         self.arp_b = tk.Button(self, text="Set", command=lambda: self.set_arp(self.arp, 7))
-        #.grid(row=10, column=2)
 
         # Ventricular Refractory Period ============================================================================
-        tk.Label(self, text="Ventricular Refractory Period (ms)").grid(row=11)
+        tk.Label(self, text="Ventricular Refractory Period (ms)").grid(row=self.row_prog+7)
         self.vrp = tk.Entry(self)
-        self.vrp.grid(row=11, column=1)
+        self.vrp.grid(row=self.row_prog+7, column=1)
         self.vrp_b = tk.Button(self, text="Set", command=lambda: self.set_vrp(self.vrp, 7))
-        #.grid(row=10, column=2)
 
-        tk.Label(self, text="").grid(row=12)
-        tk.Label(self, text="Measured Parameters").grid(row=13, columnspan=3)
+        self.row_measured = self.row_prog+8
+        tk.Label(self, text="").grid(row=self.row_measured)
+        tk.Label(self, text="Measured Parameters").grid(row=self.row_measured+1, columnspan=3)
         
-        tk.Label(self, text="Parameter").grid(row=14)
-        tk.Label(self, text="Value").grid(row=14, column=1)
-        tk.Label(self, text="Lower").grid(row=14, column=2)
+        tk.Label(self, text="Parameter").grid(row=self.row_measured+2)
+        tk.Label(self, text="Value").grid(row=self.row_measured+2, column=1)
 
         # P Wave =======================================================================================================
-        tk.Label(self, text="P Wave (mV)").grid(row=15)
+        tk.Label(self, text="P Wave (mV)").grid(row=self.row_measured+3)
         pwave = tk.Entry(self)
-        pwave.grid(row=15, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(pwave, 8)).grid(row=15, column=2)
+        pwave.grid(row=self.row_measured+3, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(pwave, 8)).grid(row=self.row_measured+3, column=2)
 
         # R Wave =======================================================================================================
-        tk.Label(self, text="R Wave (mV)").grid(row=16)
+        tk.Label(self, text="R Wave (mV)").grid(row=self.row_measured+4)
         rwave = tk.Entry(self)
-        rwave.grid(row=16, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(rwave, 9)).grid(row=16, column=2)
+        rwave.grid(row=self.row_measured+4, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(rwave, 9)).grid(row=self.row_measured+4, column=2)
 
         # PPM ==========================================================================================================
-        tk.Label(self, text="PPM").grid(row=17)
+        tk.Label(self, text="PPM").grid(row=self.row_measured+5)
         ppm = tk.Entry(self)
-        ppm.grid(row=17, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(ppm, 10)).grid(row=17, column=2)
+        ppm.grid(row=self.row_measured+5, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(ppm, 10)).grid(row=self.row_measured+5, column=2)
 
         # Battery Status Level =========================================================================================
-        tk.Label(self, text="Battery Status Level").grid(row=18)
+        tk.Label(self, text="Battery Status Level").grid(row=self.row_measured+6)
         bsl = tk.StringVar(self)
         bsl.set("AOO") # default value
-        tk.OptionMenu(self, bsl, "BOL").grid(row=18, column=1)
-        tk.Button(self, text="Set", command=lambda: self.set_variable(bsl, 11)).grid(row=18, column=2)
+        tk.OptionMenu(self, bsl, "BOL").grid(row=self.row_measured+6, column=1)
+        tk.Button(self, text="Set", command=lambda: self.set_variable(bsl, 11)).grid(row=self.row_measured+6, column=2)
 
-        # Controls =====================================================================================================
-        tk.Label(self, text="").grid(row=1, column=3)
-        tk.Label(self, text="Controls").grid(row=1, column=4, columnspan=4)
-        tk.Button(self, text="Start", command=lambda: self.update_label()).grid(row=2, column=4)
-        tk.Button(self, text="Stop", command=lambda: self.stop()).grid(row=2, column=5)
-        tk.Button(self, text="Reset", command=lambda: self.stop()).grid(row=2, column=6)
-        tk.Button(self, text="Close", command=lambda: self.close()).grid(row=2, column=7)
+        # Mode Update
+        self.update_mode()
 
 #################################################################################################################################
         #tk.Label(self, text="Monitor").grid(row=4, column=4, columnspan=4)
@@ -184,9 +188,26 @@ class Main(tk.Frame):
         if self._job is not None:
             self.after_cancel(self._job)
             self._job = None
+    
+    def update_label(self):
+        currentTime = datetime.datetime.now()
+        tk.Label(self, text=currentTime).grid(row=0)
+        self._job = self.after(1000, self.update_label)
+
+    def update_mode(self):
+        if self.bom.get() != self.current_bom.get():
+            self.set_mode(self.bom)
+        self._job = self.after(100, self.update_mode)
+
+    def set_variable(self, value, port):
+        if value.get():
+            print("Sent " + value.get() + " to port " + str(port) + ".")
+
+    #################################### SET MODE ####################################        
 
     def set_mode(self, value):
         mode = value.get()
+        self.current_bom.set(mode)
         self.lrl_b.grid_forget()
         self.url_b.grid_forget()
         self.apw_b.grid_forget()
@@ -220,14 +241,16 @@ class Main(tk.Frame):
         VRPval = usersettings['VRP']
         
         #Success message for mode selection
-        tk.Label(self, text= mode + " mode selected successfully").grid(row=6, column=4, rowspan=2,columnspan=4)
+        tk.Label(self, text= " ").grid(row=self.row_measured+7,columnspan=4)
+        tk.Label(self, text= "                  " + mode + " mode selected successfully                  ").grid(row=self.row_measured+8,columnspan=4)
+        tk.Label(self, text= " ").grid(row=self.row_measured+9,columnspan=4)
 
         if (mode == "AOO"):
             #Parameters that will show
-            self.lrl_b.grid(row=4, column=2)
-            self.url_b.grid(row=5, column=2)
-            self.apw_b.grid(row=6, column=2)
-            self.apar_b.grid(row=8, column=2)
+            self.lrl_b.grid(row=self.row_prog, column=2)
+            self.url_b.grid(row=self.row_prog+1, column=2)
+            self.apw_b.grid(row=self.row_prog+2, column=2)
+            self.apar_b.grid(row=self.row_prog+4, column=2)
             #Clear all entry fields
             self.lrl.delete(0,'end')
             self.url.delete(0,'end')
@@ -243,10 +266,10 @@ class Main(tk.Frame):
             self.apw.insert(0, APWval)
             self.apar.insert(0, APARval)
         if (mode == "VOO"):
-            self.lrl_b.grid(row=4, column=2)
-            self.url_b.grid(row=5, column=2)
-            self.vpw_b.grid(row=7, column=2)
-            self.vpar_b.grid(row=9, column=2)
+            self.lrl_b.grid(row=self.row_prog, column=2)
+            self.url_b.grid(row=self.row_prog+1, column=2)
+            self.vpw_b.grid(row=self.row_prog+3, column=2)
+            self.vpar_b.grid(row=self.row_prog+5, column=2)
             #Clear all entry fields
             self.lrl.delete(0,'end')
             self.url.delete(0,'end')
@@ -262,11 +285,11 @@ class Main(tk.Frame):
             self.vpw.insert(0, VPWval)
             self.vpar.insert(0, VPARval)
         if (mode == 'AAI'):
-            self.lrl_b.grid(row=4, column=2)
-            self.url_b.grid(row=5, column=2)
-            self.apw_b.grid(row=6, column=2)
-            self.apar_b.grid(row=8, column=2)
-            self.arp_b.grid(row=10, column=2)
+            self.lrl_b.grid(row=self.row_prog, column=2)
+            self.url_b.grid(row=self.row_prog+1, column=2)
+            self.apw_b.grid(row=self.row_prog+2, column=2)
+            self.apar_b.grid(row=self.row_prog+4, column=2)
+            self.arp_b.grid(row=self.row_prog+6, column=2)
             #Clear all entry fields
             self.lrl.delete(0,'end')
             self.url.delete(0,'end')
@@ -283,11 +306,11 @@ class Main(tk.Frame):
             self.apar.insert(0, APARval)
             self.arp.insert(0, ARPval)
         if (mode == "VVI"):
-            self.lrl_b.grid(row=4, column=2)
-            self.url_b.grid(row=5, column=2)
-            self.vpw_b.grid(row=7, column=2)
-            self.vpar_b.grid(row=9, column=2)
-            self.vrp_b.grid(row=11, column=2)
+            self.lrl_b.grid(row=self.row_prog, column=2)
+            self.url_b.grid(row=self.row_prog+1, column=2)
+            self.vpw_b.grid(row=self.row_prog+3, column=2)
+            self.vpar_b.grid(row=self.row_prog+5, column=2)
+            self.vrp_b.grid(row=self.row_prog+7, column=2)
             #Clear all entry fields
             self.lrl.delete(0,'end')
             self.url.delete(0,'end')
@@ -305,10 +328,8 @@ class Main(tk.Frame):
             self.vrp.insert(0, VRPval)
         print (mode)
         return mode
-    
-    def set_variable(self, value, port):
-        if value.get():
-            print("Sent " + value.get() + " to port " + str(port) + ".")
+
+    #################################### SET VARIABLES ####################################
 
     def set_lrl(self, value, port):
         with open('user.txt', 'r') as file:
@@ -319,6 +340,7 @@ class Main(tk.Frame):
         if (value.get().isdigit()) and (int(value.get())>=30 and int(value.get())<=175):
             if(usersettings['URL']>int(value.get())):
                 print("Sent " + value.get() + " to port " + str(port) + ".")
+                tk.Label(self, text= "                    Lower Rate Limit set to " + value.get() + " bpm                    ").grid(row=self.row_measured+8,columnspan=4)
                 #Update json file value
                 usersettings['LRL'] = int(value.get())
                 with open (filepath, "w") as file:
@@ -337,6 +359,7 @@ class Main(tk.Frame):
         if (value.get().isdigit()) and (int(value.get())>=50 and int(value.get())<=175):
             if (usersettings['LRL']<int(value.get())):
                 print("Sent " + value.get() + " to port " + str(port) + ".")
+                tk.Label(self, text= "                    Upper Rate Limit set to " + value.get() + " bpm                    ").grid(row=self.row_measured+8,columnspan=4)
                 #Update json file value
                 usersettings['URL'] = int(value.get())
                 with open (filepath, "w") as file:
@@ -351,6 +374,7 @@ class Main(tk.Frame):
             checknum = float(value.get())
             if (checknum>=0.1 and checknum<=1.9):
                 print("Sent " + value.get() + " to port " + str(port) + ".")
+                tk.Label(self, text= "                    Atrial Pulse Width set to " + value.get() + " ms                    ").grid(row=self.row_measured+8,columnspan=4)
                 #Update json file value
                 with open('user.txt', 'r') as file:
                     curruser = file.read()
@@ -370,6 +394,7 @@ class Main(tk.Frame):
             checknum = float(value.get())
             if (checknum>=0.1 and checknum<=1.9):
                 print("Sent " + value.get() + " to port " + str(port) + ".")
+                tk.Label(self, text= "                    Ventricular Pulse Width set to " + value.get() + " ms                    ").grid(row=self.row_measured+8,columnspan=4)
                 #Update json file value
                 with open('user.txt', 'r') as file:
                     curruser = file.read()
@@ -389,6 +414,7 @@ class Main(tk.Frame):
             checknum = float(value.get())
             if (checknum>=0.5 and checknum<=3.2) or (checknum>=3.5 and checknum<=7):
                 print("Sent " + value.get() + " to port " + str(port) + ".")
+                tk.Label(self, text= "                    Atrial Pulse Amplitude Regulated set to " + value.get() + " V                    ").grid(row=self.row_measured+8,columnspan=4)
                 #Update json file value
                 with open('user.txt', 'r') as file:
                     curruser = file.read()
@@ -408,6 +434,7 @@ class Main(tk.Frame):
             checknum = float(value.get())
             if (checknum>=0.5 and checknum<=3.2) or (checknum>=3.5 and checknum<=7):
                 print("Sent " + value.get() + " to port " + str(port) + ".")
+                tk.Label(self, text= "                    Ventricular Pulse Amplitude Regulated set to " + value.get() + " V                    ").grid(row=self.row_measured+8,columnspan=4)
                 #Update json file value
                 with open('user.txt', 'r') as file:
                     curruser = file.read()
@@ -425,6 +452,7 @@ class Main(tk.Frame):
     def set_arp(self, value, port):
         if (value.get().isdigit()) and (int(value.get())>=150 and int(value.get())<=500):
             print("Sent " + value.get() + " to port " + str(port) + ".")
+            tk.Label(self, text= "                    Atrial Refractory Period set to " + value.get() + " ms                    ").grid(row=self.row_measured+8,columnspan=4)
             #Update json file value
             with open('user.txt', 'r') as file:
                 curruser = file.read()
@@ -440,6 +468,7 @@ class Main(tk.Frame):
     def set_vrp(self, value, port):
         if (value.get().isdigit()) and (int(value.get())>=150 and int(value.get())<=500):
             print("Sent " + value.get() + " to port " + str(port) + ".")
+            tk.Label(self, text= "                    Ventricular Refractory Period set to " + value.get() + " ms                    ").grid(row=self.row_measured+8,columnspan=4)
             #Update json file value
             with open('user.txt', 'r') as file:
                 curruser = file.read()
@@ -451,13 +480,6 @@ class Main(tk.Frame):
                 json.dump(usersettings, file)
         else:
             messagebox.showinfo("Error", "Please choose a value between 150ms - 500ms")
-
-    def update_label(self):
-        currentTime = datetime.datetime.now()
-        tk.Label(self, text=currentTime).grid(row=0)
-        self._job = self.after(1000, self.update_label)
-
-#################################################################################################################################
 
 class Register(tk.Frame):
     def __init__(self, master):
