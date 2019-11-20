@@ -231,14 +231,14 @@ class Main(tk.Frame):
         exit()
 
     def stop(self):
-        if self._job is not None:
-            self.after_cancel(self._job)
-            self._job = None
+        if self.label_job is not None:
+            self.after_cancel(self.label_job)
+            self.label_job = None
 
     def reset(self):
-        if self._job is not None:
-            self.after_cancel(self._job)
-            self._job = None
+        if self.label_job is not None:
+            self.after_cancel(self.label_job)
+            self.label_job = None
             self.pwave.delete(0,'end')
             self.rwave.delete(0,'end')
             self.li.delete(0,'end')
@@ -251,12 +251,12 @@ class Main(tk.Frame):
         self.rwave.insert(0, currentTime)
         self.li.insert(0, currentTime)
         self.bsl.insert(0, currentTime)
-        self._job = self.after(1000, self.update_label)
+        self.label_job = self.after(1000, self.update_label)
 
     def update_mode(self):
         if self.bom.get() != self.current_bom.get():
             self.set_mode(self.bom)
-        self._job = self.after(100, self.update_mode)
+        self.mode_job = self.after(100, self.update_mode)
 
     def set_variable(self, value, port):
         if value.get():
