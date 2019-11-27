@@ -242,6 +242,13 @@ class Main(tk.Frame):
             messagebox.showinfo("Error", "Please ensure a mode is currently selected")
         print(binascii.hexlify(packet))
 
+        ser = serial.Serial(port = "/dev/ttyACM0", baudrate = 115200)
+
+        ser.flush()
+        ser.write(packet)
+
+        ser.close()
+
     #################################### SET MODE ####################################        
 
     def set_mode(self, value):
