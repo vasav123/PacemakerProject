@@ -296,7 +296,7 @@ class Main(tk.Frame):
         # | RCT |
 
         if self.mode_int >= 0:
-            packet = bytearray([usersettings['RCT'] * 60,
+            packet = bytearray([usersettings['RCT'],
                                 usersettings['RF'], 
                                 usersettings['RAT'], 
                                 usersettings['AT'],
@@ -569,56 +569,56 @@ class Main(tk.Frame):
 
     def set_arp(self, value):
         if (value.get().isdigit()) and (int(value.get())>=150 and int(value.get())<=500):
-            tk.Label(self, text= "                    Atrial Refractory Period saved to " + value.get() + "ms                    ").grid(row=self.row_prog+15,columnspan=4
+            tk.Label(self, text= "                    Atrial Refractory Period saved to " + value.get() + "ms                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'ARP')
         else:
             messagebox.showinfo("Error", "Please choose a value between 150ms - 500ms")
 
     def set_vrp(self, value):
         if (value.get().isdigit()) and (int(value.get())>=150 and int(value.get())<=500):
-            tk.Label(self, text= "                    Ventricular Refractory Period saved to " + value.get() + "ms                    ").grid(row=self.row_prog+15,columnspan=4
+            tk.Label(self, text= "                    Ventricular Refractory Period saved to " + value.get() + "ms                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'VRP')
         else:
             messagebox.showinfo("Error", "Please choose a value between 150ms - 500ms")
 
     def set_fad(self, value):
         if (value.get().isdigit()) and (int(value.get())>=70 and int(value.get())<=300):
-            tk.Label(self, text= "                    Fixed VA Delay saved to " + value.get() + "ms                    ").grid(row=self.row_prog+15,columnspan=4
+            tk.Label(self, text= "                    Fixed VA Delay saved to " + value.get() + "ms                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'FAD')
         else:
             messagebox.showinfo("Error", "Please choose a value between 70ms - 300ms")
 
     def set_msr(self, value):
         if (value.get().isdigit()) and (int(value.get())>=50 and int(value.get())<=175):
-            tk.Label(self, text= "                    Ventricular Refractory Period saved to " + value.get() + "bpm                    ").grid(row=self.row_prog+15,columnspan=4
+            tk.Label(self, text= "                    Ventricular Refractory Period saved to " + value.get() + "bpm                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'MSR')
         else:
             messagebox.showinfo("Error", "Please choose a value between 50bpm - 175bpm")
 
     def set_at(self, value):
         if (value.get().isdigit()) and (int(value.get())>=1 and int(value.get())<=7):
-            tk.Label(self, text= "                    Activity Threshold saved to " + value.get() + "                    ").grid(row=self.row_prog+15,columnspan=4
+            tk.Label(self, text= "                    Activity Threshold saved to " + value.get() + "                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'AT')
         else:
             messagebox.showinfo("Error", "Please choose a value between 1 - 7")
 
     def set_rat(self, value):
         if (value.get().isdigit()) and (int(value.get())>=10 and int(value.get())<=50):
-            tk.Label(self, text= "                    Reaction Time saved to " + value.get() + "sec                    ").grid(row=self.row_prog+15,columnspan=4
+            tk.Label(self, text= "                    Reaction Time saved to " + value.get() + "sec                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'RAT')
         else:
             messagebox.showinfo("Error", "Please choose a value between 10sec - 50sec")
 
     def set_rf(self, value):
         if (value.get().isdigit()) and (int(value.get())>=1 and int(value.get())<=16):
-            tk.Label(self, text= "                    Response Factor saved to " + value.get() + "                    ").grid(row=self.row_prog+15,columnspan=4
+            tk.Label(self, text= "                    Response Factor saved to " + value.get() + "                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'RF')
         else:
             messagebox.showinfo("Error", "Please choose a value between 1 - 16")
 
     def set_rct(self, value):
         if (value.get().isdigit()) and (int(value.get())>=10 and int(value.get())<=50):
-            tk.Label(self, text= "                    Recovery Time saved to " + value.get() + "min                    ").grid(row=self.row_prog+15,columnspan=4
+            tk.Label(self, text= "                    Recovery Time saved to " + value.get() + "min                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'RCT')
         else:
             messagebox.showinfo("Error", "Please choose a value between 2min - 16min")
