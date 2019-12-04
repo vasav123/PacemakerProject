@@ -17,7 +17,7 @@ class SampleApp(tk.Tk):
     # Initialize
     def __init__(self):
         tk.Tk.__init__(self)
-        self.title('PM')
+        self.title('Pacemaker DCM')
         self._frame = None
         self.switch_frame(Welcome)
 
@@ -296,39 +296,62 @@ class Main(tk.Frame):
         # | RCT |
 
         if self.mode_int >= 0:
-            packet = bytearray([usersettings['RCT'],
-                                usersettings['RF'], 
-                                usersettings['RAT'], 
-                                usersettings['AT'],
-                                usersettings['MSR'], 
-                                int(usersettings['FAD']/256), 
-                                usersettings['FAD']%256, 
-                                int(usersettings['VRP']/256), 
-                                usersettings['VRP']%256, 
-                                int(usersettings['ARP']/256), 
-                                usersettings['ARP']%256, 
-                                int(usersettings['VPAR']/7 * 100), 
-                                int(usersettings['APAR']/7 * 100), 
-                                int(usersettings['VPW'] * 10), 
-                                int(usersettings['APW'] * 10), 
-                                usersettings['URL'], 
-                                usersettings['LRL'], 
-                                self.mode_int,
-                                255,
+            packet = bytearray([255,
                                 0,
-                                255])
+                                255,
+                                self.mode_int,
+                                usersettings['LRL'], 
+                                usersettings['URL'], 
+                                int(usersettings['APW'] * 10), 
+                                int(usersettings['VPW'] * 10), 
+                                int(usersettings['APAR']/7 * 100), 
+                                int(usersettings['VPAR']/7 * 100), 
+                                usersettings['ARP']%256, 
+                                int(usersettings['ARP']/256), 
+                                usersettings['VRP']%256, 
+                                int(usersettings['VRP']/256), 
+                                usersettings['FAD']%256, 
+                                int(usersettings['FAD']/256), 
+                                usersettings['MSR'], 
+                                usersettings['AT'],
+                                usersettings['RAT'], 
+                                usersettings['RF'], 
+                                (usersettings['RCT']*60)%256,
+                                int((usersettings['RCT']*60)/256)])
+            print("[",end =" ")
+            for x in packet:
+                print(hex(x),end=" ")
+            print("]")
+                # print (x)print(binascii.hexlify(packet))
+            counter = 0
+
+            ser_found = True
+            while ser_found:
+                print(counter,"/dev/ttyACM"+str(counter),ser_found)
+                if counter > 256:
+                    messagebox.showinfo("Error", "Please ensure that the connection is established")
+                    ser_found = False
+                try:
+                    ser = serial.Serial(port = "/dev/ttyACM"+str(counter), baudrate = 115200)
+                    ser.flush()
+                    ser.write(packet)
+                    ser.close()
+                    ser_found = False
+                    tk.Label(self, text= "                  Data transmitted to Pacemaker successfully                  ").grid(row=self.row_prog+15,columnspan=4)
+                except:
+                    counter+=1
         else:
             messagebox.showinfo("Error", "Please ensure a mode is currently selected")
-        print(binascii.hexlify(packet))
 
-        #ser = serial.Serial(port = "/dev/ttyACM0", baudrate = 115200)
-
-        #ser.flush()
-        #ser.write(packet)
-
-        #ser.close()
-
+            #                 # print (x)print(binascii.hexlify(packet))
+            # ser = serial.Serial(port = "/dev/ttyACM0", baudrate = 115200)
+            # ser.flush()
+            # ser.write(packet)
+            # ser.close()
+        
+# [ 0xff 0x0 0xff 0x3 0x1e 0x3c 0x1 0x1 0x64 0x64 0x96 0x0 0x96 0x0 0x2c 0x1 0xaf 0x1 0xa 0x1 0x1e ]
     # Set Mode        
+
 
     def set_mode(self, value):
         mode = value.get()
@@ -506,7 +529,7 @@ class Main(tk.Frame):
             else:
                 messagebox.showinfo("Error", "Please ensure your Lower Rate Limit is less than your Upper Rate Limit")
         else:
-            messagebox.showinfo("Error", "Please choose a value between 30bpm - 175bpm")
+            messagebox.showinfo("Error", "Please choose an integer value between 30bpm - 175bpm")
 
     def set_url(self, value):
         if (value.get().isdigit()) and (int(value.get())>=50 and int(value.get())<=175):
@@ -521,7 +544,7 @@ class Main(tk.Frame):
             else:
                 messagebox.showinfo("Error", "Please ensure your Upper Rate Limit is greater than your Lower Rate Limit")
         else:
-            messagebox.showinfo("Error", "Please choose a value between 50bpm - 175bpm")
+            messagebox.showinfo("Error", "Please choose an integer value between 50bpm - 175bpm")
 
     def set_apw(self, value):
         try:
@@ -572,56 +595,56 @@ class Main(tk.Frame):
             tk.Label(self, text= "                    Atrial Refractory Period saved to " + value.get() + "ms                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'ARP')
         else:
-            messagebox.showinfo("Error", "Please choose a value between 150ms - 500ms")
+            messagebox.showinfo("Error", "Please choose an integer value between 150ms - 500ms")
 
     def set_vrp(self, value):
         if (value.get().isdigit()) and (int(value.get())>=150 and int(value.get())<=500):
             tk.Label(self, text= "                    Ventricular Refractory Period saved to " + value.get() + "ms                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'VRP')
         else:
-            messagebox.showinfo("Error", "Please choose a value between 150ms - 500ms")
+            messagebox.showinfo("Error", "Please choose an integer value between 150ms - 500ms")
 
     def set_fad(self, value):
         if (value.get().isdigit()) and (int(value.get())>=70 and int(value.get())<=300):
             tk.Label(self, text= "                    Fixed VA Delay saved to " + value.get() + "ms                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'FAD')
         else:
-            messagebox.showinfo("Error", "Please choose a value between 70ms - 300ms")
+            messagebox.showinfo("Error", "Please choose an integer value between 70ms - 300ms")
 
     def set_msr(self, value):
         if (value.get().isdigit()) and (int(value.get())>=50 and int(value.get())<=175):
             tk.Label(self, text= "                    Ventricular Refractory Period saved to " + value.get() + "bpm                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'MSR')
         else:
-            messagebox.showinfo("Error", "Please choose a value between 50bpm - 175bpm")
+            messagebox.showinfo("Error", "Please choose an integer value between 50bpm - 175bpm")
 
     def set_at(self, value):
         if (value.get().isdigit()) and (int(value.get())>=1 and int(value.get())<=7):
             tk.Label(self, text= "                    Activity Threshold saved to " + value.get() + "                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'AT')
         else:
-            messagebox.showinfo("Error", "Please choose a value between 1 - 7")
+            messagebox.showinfo("Error", "Please choose an integer value between 1 - 7")
 
     def set_rat(self, value):
         if (value.get().isdigit()) and (int(value.get())>=10 and int(value.get())<=50):
             tk.Label(self, text= "                    Reaction Time saved to " + value.get() + "sec                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'RAT')
         else:
-            messagebox.showinfo("Error", "Please choose a value between 10sec - 50sec")
+            messagebox.showinfo("Error", "Please choose an integer value between 10sec - 50sec")
 
     def set_rf(self, value):
         if (value.get().isdigit()) and (int(value.get())>=1 and int(value.get())<=16):
             tk.Label(self, text= "                    Response Factor saved to " + value.get() + "                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'RF')
         else:
-            messagebox.showinfo("Error", "Please choose a value between 1 - 16")
+            messagebox.showinfo("Error", "Please choose an integer value between 1 - 16")
 
     def set_rct(self, value):
-        if (value.get().isdigit()) and (int(value.get())>=10 and int(value.get())<=50):
+        if (value.get().isdigit()) and (int(value.get())>=2 and int(value.get())<=16):
             tk.Label(self, text= "                    Recovery Time saved to " + value.get() + "min                    ").grid(row=self.row_prog+15,columnspan=4)
             self.set_json(int(value.get()), 'RCT')
         else:
-            messagebox.showinfo("Error", "Please choose a value between 2min - 16min")
+            messagebox.showinfo("Error", "Please choose an integer value between 2min - 16min")
 
 if __name__ == "__main__":
     app = SampleApp()

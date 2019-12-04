@@ -27,8 +27,9 @@ while True:
 	# time.sleep(1)
 	# print(ord(ser.read(size =1)))
 	while (ord(ser.read(size =1)) == 22):
-		bytes_array = list(struct.unpack('<'+'d'*3, ser.read(size = 24)))
-		print((bytes_array[0]**2 + bytes_array[1]**2 + bytes_array[2]**2)**(1.0/2))
+		bytes_array = list(struct.unpack('<h', ser.read(size = 2)))
+		print(bytes_array)
+		# print((bytes_array[0]**2 + bytes_array[1]**2 + bytes_array[2]**2)**(1.0/2))
 	# time.sleep(1)
 
 ser.close()
