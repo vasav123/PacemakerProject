@@ -7,7 +7,7 @@ counter = 0
 
 ser_found = True
 while ser_found:
-	print(counter,"/dev/ttyACM"+str(counter),ser_found)
+#	print(counter,"/dev/ttyACM"+str(counter),ser_found)
 	if counter > 256:
 		print("check vm")
 		ser_found = False
@@ -28,7 +28,7 @@ while True:
 	# print(ord(ser.read(size =1)))
 	while (ord(ser.read(size =1)) == 22):
 		bytes_array = list(struct.unpack('<h', ser.read(size = 2)))
-		print(bytes_array)
+		print(bytes_array[0])
 		# print((bytes_array[0]**2 + bytes_array[1]**2 + bytes_array[2]**2)**(1.0/2))
 	# time.sleep(1)
 
